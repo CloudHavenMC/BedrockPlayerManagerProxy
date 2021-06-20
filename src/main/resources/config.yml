@@ -1,0 +1,6 @@
+#
+# Activate advanced debug messages. 
+debug: false
+#
+# Do not touch the following lines!
+version: ${project.version}

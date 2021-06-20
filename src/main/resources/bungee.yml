@@ -1,0 +1,7 @@
+main: world.ofunny.BPMProxy.BedrockPlayerManagerProxy
+name: ${project.artifactId}
+version: ${project.version}
+api-version: 1.16
+author: ofunny
+website: https://ofunny.world
+softdepend: [LuckPerms]
