@@ -26,4 +26,4 @@ settings:
 #
 #
 # Do not touch the following lines!
-version: ${project.version}
+version: "${project.version}"

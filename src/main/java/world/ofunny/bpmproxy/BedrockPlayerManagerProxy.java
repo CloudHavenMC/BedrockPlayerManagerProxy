@@ -25,7 +25,7 @@ public class BedrockPlayerManagerProxy extends Plugin {
         Logger logger = Logger.get();
 
         /*
-         * Load the plugins configuration from the plugin.yml.
+         * Load the plugins configuration from the bungee.yml.
          */
         Config.initialise(this);
         Config config = Config.get();

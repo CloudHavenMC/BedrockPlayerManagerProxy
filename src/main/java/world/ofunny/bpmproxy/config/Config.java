@@ -6,6 +6,7 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 import world.ofunny.bpmproxy.BedrockPlayerManagerProxy;
+import world.ofunny.bpmproxy.Utils.Logger;
 
 import java.io.File;
 import java.io.IOException;
