@@ -1,3 +1,5 @@
+/* The copyright according to COPYRIGHT.txt applies to this file */
+
 package world.ofunny.bpmproxy.Floodgate;
 
 import world.ofunny.bpmproxy.Utils.Logger;

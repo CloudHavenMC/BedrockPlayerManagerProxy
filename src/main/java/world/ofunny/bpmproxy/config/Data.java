@@ -1,3 +1,5 @@
+/* The copyright according to COPYRIGHT.txt applies to this file */
+
 package world.ofunny.bpmproxy.config;
 
 import net.md_5.bungee.config.Configuration;

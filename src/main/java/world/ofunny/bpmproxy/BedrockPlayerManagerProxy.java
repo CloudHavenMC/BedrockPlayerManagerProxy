@@ -1,4 +1,7 @@
+/* The copyright according to COPYRIGHT.txt applies to this file */
+
 package world.ofunny.bpmproxy;
+
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import world.ofunny.bpmproxy.Events.EventListener;
