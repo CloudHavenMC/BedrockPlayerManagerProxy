@@ -1,6 +1,29 @@
+### ofunnys Bedrock Player Manager proxy edition ###
+#   More information on: https://ofunny.world/bedrock-player-manager/
 #
-# Activate advanced debug messages. 
-debug: false
+# Permission module.
+# This module will add a defined permission group to a user whenever this user joins via a Bedrock client.
+# It will also remove that group again from the given user whenever the same user joins via a Java client.
+#
+# IMPORTANT: The proxy version of the BedrockPlayerManager only supports Luckperms as permission plugin within a network installation.
+# That means, LP has to be installed on the proxy and on each server using the same database (like MySql) and LPs plugin messaging has to be turned on.
+# You will find more information on https://luckperms.net/wiki/Network-Installation – Geyser and Floodgate have to be installed on the proxy only.
+# (If you need the full range of Bedrock Player Managers functions, you have to install the Bedrock Player Manager in the conventional way on each server.
+# You may install the Bedrock Player Manager on the proxy and on every Minecraft server, but make sure to activate the permission module on the proxy ONLY)!
+permissions:
+  # If true, the following permission group will be added / removed depending on the clients version (Bedrock / Java) when a player joins.
+  enabled: true
+  # The permission group to add for bedrock users or to remove for java users.
+  # If a user joins via Floodgate, the group gets applied otherwise removed (if previously inherited by the joining user).
+  # Make sure to add the group in your permission plugin first!
+  bedrock_group_name: "bedrock_user"
+#
+#
+settings:
+  # Activate advanced debug messages.
+  # Only recommended while testing. It will spam your servers console with a lot of debug messages :)
+  debug: false
+#
 #
 # Do not touch the following lines!
 version: ${project.version}

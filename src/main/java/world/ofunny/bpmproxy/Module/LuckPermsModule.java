@@ -1,4 +1,4 @@
-package world.ofunny.BPMProxy.Module;
+package world.ofunny.bpmproxy.Module;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -14,7 +14,9 @@ import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.Node;
 import net.luckperms.api.node.types.InheritanceNode;
-import world.ofunny.BPMProxy.Utils.Logger;
+import world.ofunny.bpmproxy.Floodgate.FloodgateAPI;
+import world.ofunny.bpmproxy.Utils.Logger;
+import world.ofunny.bpmproxy.config.Config;
 
 public enum LuckPermsModule {
 
@@ -30,11 +32,11 @@ public enum LuckPermsModule {
 	/*
 	 * Initialisation
 	 */
-	private boolean moduleInitialisationError = false;
-	private LuckPerms luckPermsApi = null;
-	private ProxyServer proxyServer;
-	private Logger logger;
-	private Config config;
+	private final String pluginName = "LuckPerms";
+	private final LuckPerms luckPermsApi;
+	private final ProxyServer proxyServer;
+	private final Logger logger;
+	private final Config config;
 	
 	/*
 	 * Contructor
@@ -51,17 +53,12 @@ public enum LuckPermsModule {
 		/*
 		 * Luckperms plugin check.
 		 */
-		if(proxyServer.getPluginManager().getPlugin(config.getLuckPermsPluginName()) == null) {
-			moduleInitialisationError = true;
-			logger.logError(config.getLuckPermsPluginName()+" plugin not found! LukePerms must be installed on your server for the permissions module to work properly – otherwise deactivate Luckperms in the permission module in your config.yml!");
+		if(proxyServer.getPluginManager().getPlugin(pluginName) == null) {
+			luckPermsApi = null;
+			logger.logError(pluginName+" plugin not found! "+pluginName+" must be installed on your proxy server for the permissions module to work properly – otherwise deactivate the permission module in your config.yml!");
 		} else {
-			moduleInitialisationError = false;
-		}// if Luckperms installed
-		
-		/*
-		 * Get LuckPerms Api-provider reference.
-		 */
-		if(!moduleInitialisationError) luckPermsApi = LuckPermsProvider.get();
+			luckPermsApi = LuckPermsProvider.get();
+		}// if Luckperms is installed
 		
 	}// end LuckPermsModule
 	
@@ -69,14 +66,6 @@ public enum LuckPermsModule {
 	 * Applies or removes the permission group defined in the plugins config file.
 	 */
 	public void performPermissionGroupChange(ProxiedPlayer player) {
-		
-		/*
-		 * Check if active or deactivated because of an error at initialisation.
-		 */
-		if(moduleInitialisationError) {
-			logger.logWarning("LuckPerms-Module initialisation failed, can not proceed!");
-			return;
-		}// end if luckPermsApi
 		
 		/*
 		 * If LuckPermsApi is given ...

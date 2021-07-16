@@ -1,7 +1,9 @@
-package world.ofunny.BPMProxy;
+package world.ofunny.bpmproxy;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
-import world.ofunny.BPMProxy.Utils.Logger;
+import world.ofunny.bpmproxy.Events.EventListener;
+import world.ofunny.bpmproxy.Utils.Logger;
+import world.ofunny.bpmproxy.config.Config;
 
 public class BedrockPlayerManagerProxy extends Plugin {
 

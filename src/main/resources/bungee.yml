@@ -1,4 +1,4 @@
-main: world.ofunny.BPMProxy.BedrockPlayerManagerProxy
+main: world.ofunny.bpmproxy.BedrockPlayerManagerProxy
 name: ${project.artifactId}
 version: ${project.version}
 api-version: 1.16

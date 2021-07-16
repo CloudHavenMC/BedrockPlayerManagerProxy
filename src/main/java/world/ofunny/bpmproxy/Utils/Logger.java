@@ -1,6 +1,6 @@
 /* The copyright according to COPYRIGHT.txt applies to this file */
 
-package world.ofunny.BPMProxy.Utils;
+package world.ofunny.bpmproxy.Utils;
 
 import net.md_5.bungee.api.ProxyServer;
 import java.util.logging.Level;
@@ -23,7 +23,7 @@ public enum Logger {
 	 */
 	private java.util.logging.Logger logger;
 	private boolean debug = false;
-	private final String logMessagePrefix = "[BedrockPlayerManager]: ";
+	private final String logMessagePrefix = "[BedrockPlayerManagerProxy]: ";
 	
 	/**
 	 * Defualt logger constructor.
