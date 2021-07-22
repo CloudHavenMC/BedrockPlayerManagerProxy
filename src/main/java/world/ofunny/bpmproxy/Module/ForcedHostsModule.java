@@ -55,7 +55,9 @@ public enum ForcedHostsModule {
             // If a forced Bedrock host has been activated
             if(!config.getForcedBedrockServer().isBlank()) {
                 serverConnectEvent.setTarget(proxyServer.getServerInfo(config.getForcedBedrockServer()));
-                logger.debugLogInfo("The Bedrock user has been forced to join "+config.getForcedBedrockServer());
+                logger.debugLogInfo("The Bedrock user has been forced to join " + config.getForcedBedrockServer()+"!");
+            } else {
+                logger.debugLogInfo("Skipping force join for the Bedrock user, because the Bedrock server is blank in the config!");
             }// end if forced Bedrock host
 
         } else {
@@ -63,7 +65,9 @@ public enum ForcedHostsModule {
             // If a forced Java host has been activated
             if(!config.getForcedJavaServer().isBlank()) {
                 serverConnectEvent.setTarget(proxyServer.getServerInfo(config.getForcedJavaServer()));
-                logger.debugLogInfo("The Java user has been forced to join "+config.getForcedJavaServer());
+                logger.debugLogInfo("The Java user has been forced to join "+config.getForcedJavaServer()+"!");
+            } else {
+                logger.debugLogInfo("Skipping force join for the Java user, because the Java server is blank in the config!");
             }// end if forced java host
 
         }// end if Bedrock noob
