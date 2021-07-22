@@ -17,7 +17,7 @@ class Floodgate_2_0 implements Floodgate {
 	 */
 	public Floodgate_2_0() {
 		
-		// Just holding the refernce to save the lookup each call.
+		// Just holding the reference to save the lookup each call.
 		floodgateApi = FloodgateApi.getInstance();
 		
 	}// end Floodgate_2_0

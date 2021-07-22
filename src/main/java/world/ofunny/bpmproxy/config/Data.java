@@ -15,7 +15,7 @@ public class Data extends DataHelper {
 	/**
 	 * Dependencies 
 	 */
-	private Logger logger;
+	private final Logger logger;
 	
 	/**
 	 * Constructor
@@ -47,6 +47,11 @@ public class Data extends DataHelper {
 	// PERMISSION MODULE
 	private boolean				permissionModuleEnabled;
 	private String				bedrockPermissionGroup;
+
+	// FORCED HOSTS
+	private boolean				forcedHostsEnabled;
+	private String				forcedJavaServer;
+	private String				forcedBedrockServer;
 
 	// SERVER ALIAS COMMANDS
 	Map<String, List<String>> 	playerTransferCommands;
@@ -106,8 +111,13 @@ public class Data extends DataHelper {
 		permissionModuleEnabled 			= configuration.getBoolean("permissions.enabled", false);
 		bedrockPermissionGroup 				= configuration.getString("permissions.bedrock_group_name", "bedrock_user");
 
+		// FORCED HOSTS
+		forcedHostsEnabled					= configuration.getBoolean("server.forced_hosts.enabled", false);
+		forcedJavaServer					= configuration.getString("server.forced_hosts.java", "");
+		forcedBedrockServer					= configuration.getString("server.forced_hosts.bedrock", "");
+
 		// SERVER ALIAS COMMANDS
-		playerTransferCommands 				= getMapOfStringLists(configuration, "playerTransferCommands");
+		playerTransferCommands 				= getMapOfStringLists(configuration, "server.playerTransferCommands");
 		
 		// GENERAL SETTINGS
 		debug 								= configuration.getBoolean("settings.debug", false);
@@ -135,6 +145,11 @@ public class Data extends DataHelper {
 	// PERMISSION MODULE
 	public boolean isPermissionModuleEnabled() 						{ return permissionModuleEnabled; }
 	public String getBedrockPermissionGroup() 						{ return bedrockPermissionGroup; }
+
+	// FORCED HOSTS
+	public boolean isForcedHostsEnabled()							{ return forcedHostsEnabled; }
+	public String getForcedJavaServer()								{ return forcedJavaServer; }
+	public String getForcedBedrockServer()							{ return forcedBedrockServer; }
 
 	// SERVER ALIAS COMMANDS
 	public Map<String, List<String>> getPlayerTransferCommands()	{ return playerTransferCommands; }

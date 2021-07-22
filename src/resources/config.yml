@@ -18,19 +18,29 @@ permissions:
   # Make sure to add the group in your permission plugin first!
   bedrock_group_name: "bedrock_user"
 #
-# Allows to create alias commands for Minecraft servers connected to the proxy, which allow the player to switch to the respective server .
-# Example
 #
-# server1:
-#   - command alias1
-#   - alias 2
-# server2:
-#   - alias1
-#
-# or "playerTransferCommands: {}" to deactivate the entire module. Because "/lobby" is just better than typing "/server lobby" for example.
-playerTransferCommands:
-  lobby:
-    - lobby
+server:
+  # When you activate the forced host feature, player will be forced to join on a defined server.
+  # You can define a server for Java and another server for Bedrock clients. If you just wanna force either Java or Bedrock clients
+  # leave the other option empty like java: "" and bedrock: "bedrockserver" for example.
+  forced_hosts:
+    enabled: false
+    java: "lobby"
+    bedrock: "lobby"
+  #
+  # Allows to create alias commands for Minecraft servers connected to the proxy, which allow the player to switch to the respective server .
+  # Example
+  #
+  # server1:
+  #   - command alias1
+  #   - alias 2
+  # server2:
+  #   - alias1
+  #
+  # or "playerTransferCommands: {}" to deactivate the entire module. Because "/lobby" is just better than typing "/server lobby" for example.
+  playerTransferCommands:
+    lobby:
+      - lobby
 #
 #
 settings:

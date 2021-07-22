@@ -22,7 +22,7 @@ public class PlayerTransferCommand extends Command {
         // Local dependencies
         this.proxyServer = ProxyServer.getInstance();
         this.serverName = serverName;
-        this.alreadyConnected = new ComponentBuilder("You are already connected to the desired server: "+serverName+"!").color(ChatColor.RED).create();
+        this.alreadyConnected = new ComponentBuilder("You're already connected to the desired server: \""+serverName+"\".").color(ChatColor.DARK_GREEN).create();
 
     }// end ServerAliasCommand
 

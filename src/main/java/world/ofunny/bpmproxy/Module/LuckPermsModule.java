@@ -16,6 +16,7 @@ import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.Node;
 import net.luckperms.api.node.types.InheritanceNode;
+import world.ofunny.bpmproxy.Floodgate.Floodgate;
 import world.ofunny.bpmproxy.Floodgate.FloodgateAPI;
 import world.ofunny.bpmproxy.Utils.Logger;
 import world.ofunny.bpmproxy.config.Config;
@@ -37,18 +38,20 @@ public enum LuckPermsModule {
 	private final String pluginName = "LuckPerms";
 	private final LuckPerms luckPermsApi;
 	private final ProxyServer proxyServer;
+	private final Floodgate floodgate;
 	private final Logger logger;
 	private final Config config;
 	
 	/*
 	 * Contructor
 	 */
-	private LuckPermsModule() {
+	LuckPermsModule() {
 		
 		/*
 		 * Local dependencies
 		 */
 		proxyServer = ProxyServer.getInstance();
+		floodgate = FloodgateAPI.get();
 		logger = Logger.get();
 		config = Config.get();
 		
@@ -125,7 +128,7 @@ public enum LuckPermsModule {
                     // Create a node to add to the player.
                     Node node = InheritanceNode.builder(group).build();
 
-                    if(FloodgateAPI.get().isBedrockPlayer(player)) {
+                    if(floodgate.isBedrockPlayer(player)) {
                     	
                     	/*
                     	 * Add the node to the user.
