@@ -6,7 +6,7 @@
 
     <groupId>world.ofunny</groupId>
     <artifactId>BedrockPlayerManagerProxy</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 
     <name>Bedrock Player Manager (Proxy edition)</name>
     <url>https://ofunny.world</url>

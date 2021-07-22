@@ -6,9 +6,11 @@ import net.md_5.bungee.config.Configuration;
 import world.ofunny.bpmproxy.BedrockPlayerManagerProxy;
 import world.ofunny.bpmproxy.Utils.Logger;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
-public class Data {
+public class Data extends DataHelper {
 	
 	/**
 	 * Dependencies 
@@ -43,14 +45,17 @@ public class Data {
 	 * Config attributes.
 	 */
 	// PERMISSION MODULE
-	private boolean			permissionModuleEnabled;
-	private String			bedrockPermissionGroup;
-	
+	private boolean				permissionModuleEnabled;
+	private String				bedrockPermissionGroup;
+
+	// SERVER ALIAS COMMANDS
+	Map<String, List<String>> 	playerTransferCommands;
+
 	// GENERAL SETTINGS
-	private boolean			debug;
+	private boolean				debug;
 	
 	// OTHER STUFF
-	private String			dataFolderPath;
+	private String				dataFolderPath;
 	
 	/**
 	 * Sets the current plugins reference.
@@ -100,6 +105,9 @@ public class Data {
 		// PERMISSION MODULE
 		permissionModuleEnabled 			= configuration.getBoolean("permissions.enabled", false);
 		bedrockPermissionGroup 				= configuration.getString("permissions.bedrock_group_name", "bedrock_user");
+
+		// SERVER ALIAS COMMANDS
+		playerTransferCommands 				= getMapOfStringLists(configuration, "playerTransferCommands");
 		
 		// GENERAL SETTINGS
 		debug 								= configuration.getBoolean("settings.debug", false);
@@ -119,19 +127,22 @@ public class Data {
 	 * Get the Plugin instance for schedulers and similar stuff.
 	 * @return returns the plugins instance.
 	 */
-	public BedrockPlayerManagerProxy getPlugin() 		{ return plugin; }// end of plugin
+	public BedrockPlayerManagerProxy getPlugin() 					{ return plugin; }// end of plugin
 	
 	// PROJECT PROPERTIES
-	public String getPluginVersion() 					{ return pluginVersion; }	
+	public String getPluginVersion() 								{ return pluginVersion; }
 
 	// PERMISSION MODULE
-	public boolean isPermissionModuleEnabled() 			{ return permissionModuleEnabled; }
-	public String getBedrockPermissionGroup() 			{ return bedrockPermissionGroup; }
+	public boolean isPermissionModuleEnabled() 						{ return permissionModuleEnabled; }
+	public String getBedrockPermissionGroup() 						{ return bedrockPermissionGroup; }
+
+	// SERVER ALIAS COMMANDS
+	public Map<String, List<String>> getPlayerTransferCommands()	{ return playerTransferCommands; }
 
 	// GENERAL SETTINGS
-	public boolean isDebug() 							{ return debug; }
+	public boolean isDebug() 										{ return debug; }
 	
 	// OTHER STUFF
-	public String getDataFolderPath() 					{ return dataFolderPath; }
+	public String getDataFolderPath() 								{ return dataFolderPath; }
 
 }// end Data
