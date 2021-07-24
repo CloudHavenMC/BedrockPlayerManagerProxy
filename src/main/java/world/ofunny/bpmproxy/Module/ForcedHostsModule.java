@@ -53,7 +53,7 @@ public enum ForcedHostsModule {
         if(floodgate.isBedrockPlayer(serverConnectEvent.getPlayer())) {
 
             // If a forced Bedrock host has been activated
-            if(!config.getForcedBedrockServer().isBlank()) {
+            if(!config.getForcedBedrockServer().isEmpty()) {
                 serverConnectEvent.setTarget(proxyServer.getServerInfo(config.getForcedBedrockServer()));
                 logger.debugLogInfo("The Bedrock user has been forced to join " + config.getForcedBedrockServer()+"!");
             } else {
@@ -63,7 +63,7 @@ public enum ForcedHostsModule {
         } else {
 
             // If a forced Java host has been activated
-            if(!config.getForcedJavaServer().isBlank()) {
+            if(!config.getForcedJavaServer().isEmpty()) {
                 serverConnectEvent.setTarget(proxyServer.getServerInfo(config.getForcedJavaServer()));
                 logger.debugLogInfo("The Java user has been forced to join "+config.getForcedJavaServer()+"!");
             } else {

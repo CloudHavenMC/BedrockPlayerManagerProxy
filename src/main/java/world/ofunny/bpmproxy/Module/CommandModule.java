@@ -39,7 +39,7 @@ public enum CommandModule {
             // Iterate trough every alias name in the list of the given server key.
             commandAliasList.forEach((String commandAlias) -> {
                 // Register each transfer command alias defined in the conig yaml (if the command alias is not empty or blank).
-                if(commandAlias.isBlank()) {
+                if(commandAlias.isEmpty()) {
                     logger.logWarning("Registration of player transfer alias command for server "+serverName+" failed – a command name is blank or invalid, check your config.yml!");
                 } else {
                     pluginManager.registerCommand(config.getPlugin(), new PlayerTransferCommand(serverName, commandAlias, ""));
