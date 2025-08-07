@@ -1,49 +1,46 @@
 package world.ofunny.bpmproxy.commands;
 
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.plugin.Command;
+import com.velocitypowered.api.command.SimpleCommand;
+import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.ProxyServer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import world.ofunny.bpmproxy.BedrockPlayerManagerProxy;
 
-public class PlayerTransferCommand extends Command {
+public class PlayerTransferCommand implements SimpleCommand {
 
     private final ProxyServer proxyServer;
     private final String serverName;
-    private final BaseComponent[] alreadyConnected;
+    private final String serverPermission;
 
-    public PlayerTransferCommand(String serverName, String commandName, String serverPermission) {
-
-        // Call constructor of the Command class
-        super(commandName, serverPermission);
+    public PlayerTransferCommand(String serverName, String serverPermission) {
 
         // Local dependencies
-        this.proxyServer = ProxyServer.getInstance();
+        this.proxyServer = BedrockPlayerManagerProxy.getInstance().getProxyServer();
         this.serverName = serverName;
-        this.alreadyConnected = new ComponentBuilder("You're already connected to the desired server: \""+serverName+"\".").color(ChatColor.DARK_GREEN).create();
+        this.serverPermission = serverPermission;
 
     }// end ServerAliasCommand
 
     @Override
-    public void execute(CommandSender commandSender, String[] strings) {
-
+    public void execute(Invocation invocation) {
         // Only players can actually call this command (the console does not need that command at all).
-        if (!(commandSender instanceof ProxiedPlayer)) return;
-
-        // Cast the commandSender to a ProxiedPlayer object (can not be anything else at this point).
-        ProxiedPlayer proxiedPlayer = (ProxiedPlayer) commandSender;
+        if (!(invocation.source() instanceof Player player)) return;
 
         // Check first if the player is already connected to the given Minecraft server!
-        if (proxiedPlayer.getServer().getInfo().getName().equalsIgnoreCase(serverName)) {
-            proxiedPlayer.sendMessage(alreadyConnected);
+        if (player.getCurrentServer().get().getServerInfo().getName().equalsIgnoreCase(serverName)) {
+            player.sendMessage(Component.text("You're already connected to the desired server: \""+serverName+"\".").color(NamedTextColor.DARK_GREEN));
             return;
         }// end if already connected
 
         // Transfer the player to the given Minecraft server.
-        proxiedPlayer.connect(proxyServer.getServerInfo(serverName));
+        proxyServer.getServer(serverName).ifPresent(server -> {
+            player.createConnectionRequest(server).fireAndForget();
+        });
+    }
 
-    }// end execute
-
+    @Override
+    public boolean hasPermission(Invocation invocation) {
+        return invocation.source().hasPermission(serverPermission);
+    }
 }// end playerTransferCommand

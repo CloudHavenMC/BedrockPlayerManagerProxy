@@ -1,7 +1,8 @@
 package world.ofunny.bpmproxy.Module;
 
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.event.ServerConnectEvent;
+import com.velocitypowered.api.event.player.ServerPreConnectEvent;
+import com.velocitypowered.api.proxy.ProxyServer;
+import world.ofunny.bpmproxy.BedrockPlayerManagerProxy;
 import world.ofunny.bpmproxy.Floodgate.Floodgate;
 import world.ofunny.bpmproxy.Floodgate.FloodgateAPI;
 import world.ofunny.bpmproxy.Utils.Logger;
@@ -18,34 +19,30 @@ public enum ForcedHostsModule {
     /*
      * Initialisation
      */
-    private final ProxyServer proxyServer;
-    private final Floodgate floodgate;
-    private final Logger logger;
-    private final Config config;
+    private ProxyServer proxyServer;
+    private Floodgate floodgate;
+    private Logger logger;
+    private Config config;
 
-    ForcedHostsModule() {
-
-        /*
-         * Local dependencies
-         */
-        proxyServer = ProxyServer.getInstance();
+    public void initialize(BedrockPlayerManagerProxy plugin) {
+        proxyServer = plugin.getProxyServer();
         floodgate = FloodgateAPI.get();
         logger = Logger.get();
         config = Config.get();
-
-    }// end ForcedHostsModule
+    }
 
 
     /**
      * Called when deciding to connect to a server. At the time when this event is called, no connection has actually been made.
      * If the module has been activated in the config an a forced host has been defined, the target server will be overwritten here.
      */
-    public void onServerConnectEvent(ServerConnectEvent serverConnectEvent) {
+    public void onServerConnectEvent(ServerPreConnectEvent serverConnectEvent) {
 
         /*
          * We just perform forced connection on proxy join!
          */
-        if(serverConnectEvent.getReason() != ServerConnectEvent.Reason.JOIN_PROXY) return;
+        if (serverConnectEvent.getPreviousServer() == null)
+            return;
 
         /*
          * Performing the server assignment depending on the client the player is using.
@@ -54,8 +51,10 @@ public enum ForcedHostsModule {
 
             // If a forced Bedrock host has been activated
             if(!config.getForcedBedrockServer().isEmpty()) {
-                serverConnectEvent.setTarget(proxyServer.getServerInfo(config.getForcedBedrockServer()));
-                logger.debugLogInfo("The Bedrock user has been forced to join " + config.getForcedBedrockServer()+"!");
+                proxyServer.getServer(config.getForcedBedrockServer()).ifPresentOrElse(server -> {
+                    serverConnectEvent.setResult(ServerPreConnectEvent.ServerResult.allowed(server));
+                    logger.debugLogInfo("The Bedrock user has been forced to join " + config.getForcedBedrockServer()+"!");
+                }, () -> logger.debugLogWarning("The Bedrock user has failed to join " + config.getForcedBedrockServer() + " because the server couldn't be found."));
             } else {
                 logger.debugLogInfo("Skipping force join for the Bedrock user, because the Bedrock server is blank in the config!");
             }// end if forced Bedrock host
@@ -64,8 +63,10 @@ public enum ForcedHostsModule {
 
             // If a forced Java host has been activated
             if(!config.getForcedJavaServer().isEmpty()) {
-                serverConnectEvent.setTarget(proxyServer.getServerInfo(config.getForcedJavaServer()));
-                logger.debugLogInfo("The Java user has been forced to join "+config.getForcedJavaServer()+"!");
+                proxyServer.getServer(config.getForcedJavaServer()).ifPresentOrElse(server -> {
+                    serverConnectEvent.setResult(ServerPreConnectEvent.ServerResult.allowed(server));
+                    logger.debugLogInfo("The Java user has been forced to join " + config.getForcedJavaServer()+"!");
+                }, () -> logger.debugLogWarning("The Java user has failed to join " + config.getForcedJavaServer() + " because the server couldn't be found."));
             } else {
                 logger.debugLogInfo("Skipping force join for the Java user, because the Java server is blank in the config!");
             }// end if forced java host

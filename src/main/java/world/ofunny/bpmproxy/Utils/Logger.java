@@ -2,7 +2,8 @@
 
 package world.ofunny.bpmproxy.Utils;
 
-import net.md_5.bungee.api.ProxyServer;
+import world.ofunny.bpmproxy.BedrockPlayerManagerProxy;
+
 import java.util.logging.Level;
 
 /**
@@ -24,13 +25,10 @@ public enum Logger {
 	private java.util.logging.Logger logger;
 	private boolean debug = false;
 	private final String logMessagePrefix = "[BedrockPlayerManagerProxy]: ";
-	
-	/**
-	 * Defualt logger constructor.
-	 */
-	private Logger() {
-		logger = ProxyServer.getInstance().getLogger();
-	}// end Utils
+
+	public void initialize(BedrockPlayerManagerProxy plugin) {
+		logger = plugin.getServerLogger();
+	}
 
 	/**
 	 * Toggles debug output (if used in the plugin).

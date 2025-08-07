@@ -2,7 +2,7 @@
 
 package world.ofunny.bpmproxy.Floodgate;
 
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import com.velocitypowered.api.proxy.Player;
 
 class Floodgate_Dummy implements Floodgate {
 
@@ -10,7 +10,7 @@ class Floodgate_Dummy implements Floodgate {
 	 * Will always return false (everybody will be a Java player).
 	 * Used when Floodgate is missing in solo mode (usage without Floodgate) or could not be found.
 	 */
-	public boolean isBedrockPlayer(ProxiedPlayer player) {
+	public boolean isBedrockPlayer(Player player) {
 		return false;
 	}// end isBedrockPlayer 
 	

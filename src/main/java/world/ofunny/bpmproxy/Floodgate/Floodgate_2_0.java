@@ -2,7 +2,7 @@
 
 package world.ofunny.bpmproxy.Floodgate;
 
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import com.velocitypowered.api.proxy.Player;
 import org.geysermc.floodgate.api.FloodgateApi;
 
 class Floodgate_2_0 implements Floodgate {
@@ -25,7 +25,7 @@ class Floodgate_2_0 implements Floodgate {
 	/**
 	 * Check if user is coming from Floodgate
 	 */
-	public boolean isBedrockPlayer(ProxiedPlayer player) {
+	public boolean isBedrockPlayer(Player player) {
 		return floodgateApi.isFloodgatePlayer(player.getUniqueId());
 	}// end isBedrockPlayer 
 	

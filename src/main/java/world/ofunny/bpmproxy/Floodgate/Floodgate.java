@@ -2,10 +2,10 @@
 
 package world.ofunny.bpmproxy.Floodgate;
 
-import net.md_5.bungee.api.connection.ProxiedPlayer;
+import com.velocitypowered.api.proxy.Player;
 
 public interface Floodgate {
 	
-	boolean isBedrockPlayer(ProxiedPlayer player);
+	boolean isBedrockPlayer(Player player);
 
 }// end Floodgate

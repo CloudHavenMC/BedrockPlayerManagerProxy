@@ -2,15 +2,16 @@
 
 package world.ofunny.bpmproxy.config;
 
-import net.md_5.bungee.config.Configuration;
-import net.md_5.bungee.config.ConfigurationProvider;
-import net.md_5.bungee.config.YamlConfiguration;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 import world.ofunny.bpmproxy.BedrockPlayerManagerProxy;
+import world.ofunny.bpmproxy.Utils.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -27,7 +28,7 @@ public class Config extends Data {
 	 * (Do not remove the following three unless you know what you are doing).
 	 */
 	private static Config INSTANCE = null;
-	private Configuration configuration = null;
+	private CommentedConfigurationNode configuration = null;
 	private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy_MM_dd-HH_mm_ss");  
 	
 	/*
@@ -108,30 +109,12 @@ public class Config extends Data {
 		createDataFolderIfAbsent();
 
 		// Check if the config yaml exists, otherwise create the default plugins config directory.
-		File file = new File(getPlugin().getDataFolder(), yamlFileName);
-		if(!file.exists()) saveDefaultConfig();// Just copying the default config from the plugins resources.
+		Path path = getPlugin().getDataDirectory().resolve(yamlFileName);
+		if(Files.notExists(path)) saveDefaultConfig(path);// Just copying the default config from the plugins resources.
 
 		// Loading the configuration from the file.
-		configuration = loadPluginConfigFromFile();
+		configuration = loadPluginConfigFromFile(path);
 
-		/*
-		 * If a config file other than the current version has been found, we copy it and rename it by adding "old" to its name.
-		 * (Sorry I don't have the time to write a migration method what keeps the values including all comments.
-		 *  And I really don't like the API version what stripes all of them! Maybe a thing for the next update.)
-		 */
-		if(!configuration.getString("version").equals(getPluginVersion())) {
-
-			// Renaming the old config and copying the default config from the plugins resources.
-			file.renameTo(new File(getPlugin().getDataFolder(), dateTimeFormatter.format(LocalDateTime.now()) + "-old." + yamlFileName));
-
-			// Copy the new default config
-			saveDefaultConfig();
-
-			// In this case we have to reload the config to be on the save side!
-			configuration = loadPluginConfigFromFile();
-
-		}// end if config is from another version
-		
 		// sets all config options within this class and performs post processing.
 		if(this.configuration != null) setData(this.configuration);// should we set all options
 
@@ -141,7 +124,13 @@ public class Config extends Data {
 	 * Creates the plugins data folder if it does not exist
 	 */
 	private void createDataFolderIfAbsent() {
-		if(!getPlugin().getDataFolder().exists()) getPlugin().getDataFolder().mkdir();
+		if(Files.notExists(getPlugin().getDataDirectory())) {
+			try {
+				Files.createDirectories(getPlugin().getDataDirectory());
+			} catch (IOException exc) {
+				exc.printStackTrace();
+			}
+		}
 	}// end createDataFolderIfAbsent
 
 	/*
@@ -152,12 +141,14 @@ public class Config extends Data {
 	/**
 	 * Saves the plugins default configuration from the resource.
 	 */
-	private boolean saveDefaultConfig() {
+	private boolean saveDefaultConfig(Path configPath) {
 
 		// Unlike Bukkit, there is no saveDefaultConfig method so we have to program it on our own.
-		File file = new File(getPlugin().getDataFolder(), yamlFileName);
-		try (InputStream in = getPlugin().getResourceAsStream(yamlFileName)) {
-			Files.copy(in, file.toPath());
+		try (InputStream in = getPlugin().getClass().getResourceAsStream("/" + configPath.getFileName().toString())) {
+			if (in == null)
+				return false;
+
+			Files.copy(in, configPath);
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -170,9 +161,9 @@ public class Config extends Data {
 	 * Getting the plugins configuration from the file.
 	 * (Since there is no such method as in Bukkit, we also have to do that on our own)
 	 */
-	private Configuration loadPluginConfigFromFile() {
+	private CommentedConfigurationNode loadPluginConfigFromFile(Path configPath) {
 		try {
-			return ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(getPlugin().getDataFolder(), yamlFileName));
+			return YamlConfigurationLoader.builder().path(configPath).build().load();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;

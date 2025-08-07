@@ -2,10 +2,11 @@
 
 package world.ofunny.bpmproxy.config;
 
-import net.md_5.bungee.config.Configuration;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 import world.ofunny.bpmproxy.BedrockPlayerManagerProxy;
 import world.ofunny.bpmproxy.Utils.Logger;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -60,7 +61,7 @@ public class Data extends DataHelper {
 	private boolean				debug;
 	
 	// OTHER STUFF
-	private String				dataFolderPath;
+	private Path dataFolderPath;
 	
 	/**
 	 * Sets the current plugins reference.
@@ -102,28 +103,28 @@ public class Data extends DataHelper {
 	 * We copy all config option by value in our instance for good reasons (some preperation in case we do async stuff in the future)
 	 * (Natives [including strings] get passed by value and getStringList will already return a clone, so no need to do redundant work here).
 	 */
-	protected void setData(Configuration configuration) {
+	protected void setData(CommentedConfigurationNode configuration) {
 
 		/*
 		 * Set config params.
 		 */
 		// PERMISSION MODULE
-		permissionModuleEnabled 			= configuration.getBoolean("permissions.enabled", false);
-		bedrockPermissionGroup 				= configuration.getString("permissions.bedrock_group_name", "bedrock_user");
+		permissionModuleEnabled 			= configuration.node("permissions", "enabled").getBoolean(false);
+		bedrockPermissionGroup 				= configuration.node("permissions", "bedrock_group_name").getString("bedrock_user");
 
 		// FORCED HOSTS
-		forcedHostsEnabled					= configuration.getBoolean("server.forced_hosts.enabled", false);
-		forcedJavaServer					= configuration.getString("server.forced_hosts.java", "");
-		forcedBedrockServer					= configuration.getString("server.forced_hosts.bedrock", "");
+		forcedHostsEnabled					= configuration.node("server", "forced_hosts", "enabled").getBoolean(false);
+		forcedJavaServer					= configuration.node("server", "forced_hosts", "java").getString("");
+		forcedBedrockServer					= configuration.node("server", "forced_hosts", "bedrock").getString("");
 
 		// SERVER ALIAS COMMANDS
-		playerTransferCommands 				= getMapOfStringLists(configuration, "server.playerTransferCommands");
+		playerTransferCommands 				= getMapOfStringLists(configuration, "server", "playerTransferCommands");
 		
 		// GENERAL SETTINGS
-		debug 								= configuration.getBoolean("settings.debug", false);
+		debug 								= configuration.node("settings", "debug").getBoolean(false);
 		
 		// OTHER STUFF
-		dataFolderPath 						= plugin.getDataFolder().getPath()+"/data/";
+		dataFolderPath 						= plugin.getDataDirectory().resolve("data");
 		
 		/*
 		 * Performing additional post processing each time the config gets (re-)loaded. 
@@ -158,6 +159,6 @@ public class Data extends DataHelper {
 	public boolean isDebug() 										{ return debug; }
 	
 	// OTHER STUFF
-	public String getDataFolderPath() 								{ return dataFolderPath; }
+	public Path getDataFolderPath() 								{ return dataFolderPath; }
 
 }// end Data
